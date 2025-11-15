@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Rabanito Supermercado{% endblock %}</title>
+    <link rel="stylesheet" href="/static/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="menu-izquierda">
+        <a href="/"><img class="logo" src="/static/logosupermercado.png" width="180" alt="Logo de la Tienda"></a>
+        <div class="buscador-productos">
+            <form action="/buscar-productos" method="GET" class="form-busqueda">
+                <input 
+                type="text" 
+                name="query" 
+                placeholder="Buscar productos" 
+                value="{{ request.args.query if request.args.query }}"
+                >
+            </form>
+        </div>
+        </div>
+        <div class="menu-derecha">
+            <div class="usuarios">
+                {% if usuario %}
+                <div class="usuario-logueado">
+                    <span>{{ usuario }}</span>
+                    <a href="/usuarios/logout" class="logout">Salir</a>
+                </div>
+                {% else %}
+                    <div class="dropdown">
+                        <button class="dropbtn">Identifícate ▾</button>
+                        <div class="dropdown-content">
+                            <h4>Invitado</h4>
+                            <a href="/usuarios/login">Iniciar sesión</a>
+                            <a href="/usuarios/registro">Registrarse</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="carrito">
+                {% if total_unidades == 0 %}  
+                    <div class="carrito-vacio">
+                        <a href="/carrito" class="carrito-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-basket2-fill" viewBox="0 0 16 16">
+                            <path d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1"/>
+                            </svg>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="carrito-lleno">
+                        <a href="/carrito" class="carrito-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-basket2-fill" viewBox="0 0 16 16">
+                            <path d="M5.929 1.757a.5.5 0 1 0-.858-.514L2.217 6H.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h.623l1.844 6.456A.75.75 0 0 0 3.69 15h8.622a.75.75 0 0 0 .722-.544L14.877 8h.623a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1.717L10.93 1.243a.5.5 0 1 0-.858.514L12.617 6H3.383zM4 10a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm3 0a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0zm4-1a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1"/>
+                            </svg>                
+                            <span class="contador-carrito">{{ total_unidades }}</span>
+                            <span class="total-carrito">{{ total_carrito }}€</span>
+                        </a>
+                    </div>
+                {% endif %}
+                </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        document.body.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("boton-agregar")) {
+            const id = e.target.dataset.id;
+
+            try {
+                await fetch(`/al_carrito/${id}`, { method: "POST" });
+
+                const resInfo = await fetch("/carrito-info");
+                const data = await resInfo.json();
+                document.querySelector(".contador-carrito").textContent = data.total_unidades;
+                document.querySelector(".total-carrito").textContent = `${data.total_precio}€`;
+
+                if (contador) contador.textContent = data.total_unidades;
+                if (total) total.textContent = `${data.total_precio}€`;
+
+            } catch (err) {
+                console.error("Error al actualizar carrito:", err);
+            }
+            }
+        });
+        });
+    </script>
+
+
+    <footer>
+        <p>© 2025 - Rabanito Supermercado</p>
+    </footer>
+</body>
+</html>

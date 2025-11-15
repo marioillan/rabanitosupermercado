@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Editar producto{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/editar.css">
+{% endblock %}
+
+{% block content %}
+<main class="editar-container">
+  <h2>Editar precio del producto</h2>
+
+  <div class="producto-editar">
+    <img src="{{ producto.url_img }}" alt="{{ producto.texto_1 }}" width="200">
+    <h3>{{ producto.texto_1 }}</h3>
+    <p>{{ producto.texto_2 }}</p>
+    <p><strong>Precio actual:</strong> {{ producto.precio_euros }} €</p>
+    {% if producto.precio_rebajado != 0 %}
+      <p><strong>Precio rebajado:</strong> {{ producto.precio_rebajado }} €</p>
+    {% endif %}
+  </div>
+
+  <form action="/productos/{{ producto._id }}/editar" method="POST" class="form-editar">
+    <label for="precio_euros">Nuevo precio (€):</label>
+    <input
+      type="number"
+      id="precio_euros"
+      name="precio_euros"
+      step="0.01"
+      value="{{ producto.precio_euros }}"
+      required
+    >
+
+    <label for="precio_rebajado">Precio rebajado (opcional):</label>
+    <input
+      type="number"
+      id="precio_rebajado"
+      name="precio_rebajado"
+      step="0.01"
+      value="{{ producto.precio_rebajado }}"
+    >
+
+    <div class="botones-editar">
+      <button type="submit" class="btn-guardar">Guardar cambios</button>
+      <a href="/" class="btn-cancelar">Cancelar</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

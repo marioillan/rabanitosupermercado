@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Supermercado Rabanito{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="/static/portada.css">
+{% endblock %}
+
+{% block content %}
+  <main>
+    <h2>Bienvenido a la Tienda Online</h2>  
+    <div class="portada-derecha"> 
+      <h4>Aquí verás nuestros productos destacados</h4>
+      <div class="productos">
+        {% for producto in productos %}
+          <div class="producto">
+            <img src="{{ producto.url_img }}" alt="{{ producto.texto_1 }}">
+            <h3>{{ producto.texto_1 }}</h3>
+              <div class="precio-container">
+                <p class="precio">{{ producto.precio_euros }} €</p>
+                {% if producto.precio_rebajado != 0 %}
+                  <p class="precio-rebajado">{{ producto.precio_rebajado }} €</p>
+                {% endif %}
+              </div>
+            <p class="categoria">{{ producto.categoría }}</p>    
+            <p class="cantidad">{{ producto.texto_2 }}</p>
+            <div class="botones-container">
+              <form action="/al_carrito/{{ producto._id }}" method="post">
+                <button type="submit" class="boton-agregar">Agregar al carrito</button>
+              </form>
+              {% if admin %}
+                <a href="/productos/{{ producto._id }}/editar" class="boton-cambiar">Cambiar precio</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const botones = document.querySelectorAll(".boton-agregar");
+
+      botones.forEach(boton => {
+        boton.addEventListener("click", async (e) => {
+          const id = e.target.dataset.id;
+
+          try {
+            await fetch(`/al_carrito/${id}`, {
+              method: "POST"
+            });
+          } catch (error) {
+            console.error("Error al añadir producto al carrito:", error);
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}

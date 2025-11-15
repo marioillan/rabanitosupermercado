@@ -1,0 +1,7 @@
+{"level":"info","message":"GET /static/main.css 304 - - 6.790 ms"}
+{"level":"info","message":"GET /static/portada.css 304 - - 1.951 ms"}
+{"level":"info","message":"GET /static/logosupermercado.png 304 - - 3.028 ms"}
+{"level":"info","message":"Acceso a formulario de login"}
+{"level":"info","message":"GET /static/main.css 304 - - 0.744 ms"}
+{"level":"info","message":"GET /static/login.css 304 - - 2.810 ms"}
+{"level":"info","message":"GET /static/logosupermercado.png 304 - - 2.862 ms"}

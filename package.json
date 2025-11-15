@@ -1,0 +1,27 @@
+{
+  "main": "parser.js",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "chokidar": "^3.6.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "6.19",
+    "mongoose": "^8.19.0",
+    "morgan": "^1.10.1",
+    "node-html-parser": "^7.0.1",
+    "nunjucks": "^3.2.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.18.3"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file=.env tienda.js"
+  }
+}
